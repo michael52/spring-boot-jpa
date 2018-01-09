@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Repository
 public class BookDaoImpl implements BookDao {
 
-    @PersistenceContext
+    @PersistenceUnit
     private EntityManagerFactory emFactory;
 
     BookDaoImpl() {
