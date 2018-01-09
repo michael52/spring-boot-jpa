@@ -12,6 +12,7 @@ public class BookDaoImpl implements BookDao {
     private EntityManagerFactory emFactory;
 
     BookDaoImpl() {
+
     }
 
     @Override
