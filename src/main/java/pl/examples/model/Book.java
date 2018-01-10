@@ -90,6 +90,16 @@ public class Book implements Serializable {
         this.updateDate = updateDate;
     }
 
+    @PrePersist
+    public void prePersist(){
+        System.out.println("Before save object " + this);
+    }
+
+    @PostPersist
+    public void postPersist(){
+        System.out.println("After save object " + this);
+    }
+
     @Override
     public String toString() {
         return "Book{" +
