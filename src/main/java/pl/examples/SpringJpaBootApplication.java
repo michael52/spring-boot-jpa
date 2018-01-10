@@ -13,16 +13,24 @@ public class SpringJpaBootApplication
     public static void main( String[] args ) throws InterruptedException {
         ConfigurableApplicationContext ctx = SpringApplication.run(SpringJpaBootApplication.class, args);
 
-        BookDao bookDao = ctx.getBean(BookDao.class);
-        Book book = new Book("123123223", "Fale i anteny", "Jarosław Szóstka");
-        bookDao.save(book);
-        System.out.println("Zapisano do bazy danych");
-        Book bookFromDb = bookDao.get(1L);
-        System.out.println(bookFromDb);
+        // CREATE
+        BookDao dao = ctx.getBean(BookDao.class);
+        Book book = new Book("1234567890468", "Spring is so cool", "Spring");
+        dao.save(book);
 
-        //to see db open connections
-        Thread.sleep(5000);
-        ctx.close();
+        // UPDATE
+        Book book2 = new Book("987654321", "Spring is NOT so cool", "EJB");
+        book2.setId(1L);
+        dao.update(book2);
+
+        // READ
+        Book findBook = dao.get(1L);
+        System.out.println(findBook);
+
+        // DELETE
+        dao.remove(1L);
+        Book book3 = dao.get(1L);
+        System.out.println(book3); //null
 
     }
 }

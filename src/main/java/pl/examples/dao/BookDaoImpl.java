@@ -1,6 +1,7 @@
 package pl.examples.dao;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import pl.examples.model.Book;
 
 import javax.persistence.*;
@@ -8,28 +9,43 @@ import javax.persistence.*;
 @Repository
 public class BookDaoImpl implements BookDao {
 
-    @PersistenceUnit
-    private EntityManagerFactory emFactory;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     BookDaoImpl() {
-
     }
 
     @Override
+    @Transactional
     public void save(Book book) {
-        EntityManager entityManager = emFactory.createEntityManager();
-        EntityTransaction tx = entityManager.getTransaction();
-        tx.begin();
         entityManager.persist(book);
-        tx.commit();
-        entityManager.close();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Book get(Long id) {
-        EntityManager entityManager = emFactory.createEntityManager();
         Book book = entityManager.find(Book.class, id);
-        entityManager.close();
         return book;
     }
+
+    @Override
+    @Transactional
+    public void update(Book book) {
+        Book find = entityManager.find(Book.class, book.getId());
+        if(find != null){
+            find.setTitle(book.getTitle());
+            find.setIsbn(book.getIsbn());
+            find.setAuthor(book.getAuthor());
+        }
+    }
+
+    @Override
+    @Transactional
+    public void remove(Long bookId) {
+        Book bookToRemove = entityManager.find(Book.class, bookId);
+        if(bookToRemove != null){
+            entityManager.remove(bookToRemove);
+        }
+    }
 }
+

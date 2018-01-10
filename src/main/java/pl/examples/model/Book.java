@@ -1,23 +1,36 @@
 package pl.examples.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalTime;
+import java.util.Date;
 
 @Entity
-public class Book implements Serializable{
+@Table(name = "Books")
+public class Book implements Serializable {
 
 
     @Id
     @GeneratedValue
+    @Column(name = "book_id")
     private Long id;
+
+    @Column(nullable = false, length = 13, unique = true)
     private String isbn;
+
+    @Column(nullable = false)
     private String title;
+
+    @Column(nullable = false)
     private String author;
 
-    private String createDate;
+    @CreationTimestamp
+    private Date createDate;
+
+    @UpdateTimestamp
+    private Date updateDate;
 
     public Book() {
 
@@ -27,7 +40,6 @@ public class Book implements Serializable{
         this.isbn = isbn;
         this.title = title;
         this.author = author;
-        this.createDate = LocalTime.now().toString();
     }
 
     public Long getId() {
@@ -62,12 +74,20 @@ public class Book implements Serializable{
         this.author = author;
     }
 
-    public String getCreateDate() {
+    public Date getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(String createDate) {
+    public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
     }
 
     @Override
@@ -77,7 +97,7 @@ public class Book implements Serializable{
                 ", isbn='" + isbn + '\'' +
                 ", title='" + title + '\'' +
                 ", author='" + author + '\'' +
-                ", createDate='" + createDate + '\'' +
+                ", createDate=" + createDate +
                 '}';
     }
 }
